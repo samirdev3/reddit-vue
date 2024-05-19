@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Reddit Search</title>
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script src="assets/js/app.js" type="module"></script>
+</head>
+<body>
+
+<section id="app" v-cloak>
+
+    <nav>
+        <form v-if="menu.active" @submit.prevent>
+            <div class="inner">
+                <div class="options">
+                    <select @change="filterBy(filter.type, 'type')" v-model="filter.type">
+                        <option value="keyword">Keyword</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+                <div class="options">
+                    <input type="text" placeholder="Search" v-model="search.input" />
+                    <button type="text" @click="searchQuery('')">
+                        Search
+                    </button>
+                </div>
+                <div class="options">
+                    <select @change="filterBy(filter.sort, 'sort')" v-model="filter.sort">
+                        <option value="relevance">Relevance</option>
+                        <option value="hot">Hot</option>
+                        <option value="top">Top</option>
+                        <option value="new">New</option>
+                        <option value="comments">Comments</option>
+                    </select>
+                </div>
+                <div class="options">
+                    <select @change="filterBy(filter.time, 'time')" v-model="filter.time">
+                        <option value="all">All</option>
+                        <option value="year">Year</option>
+                        <option value="month">Month</option>
+                        <option value="week">Week</option>
+                        <option value="day">Day</option>
+                    </select>
+                </div>
+                <div class="options">
+                    <select @change="filterBy(filter.nsfw, 'nsfw')" v-model="filter.nsfw">
+                        <option value="off">Safe Search</option>
+                        <option value="on">NSFW</option>
+                    </select>
+                </div>
+                <div class="options">
+                    <button type="text" @click="toggleHistory" class="historyButton">
+                        History {{ history.text }}
+                    </button>
+                </div>
+            </div>
+        </form>
+        <button class="menu" v-if="menu.visible" @click="toggleMenu">
+            <span v-if="menu.active">Close</span>
+            <span v-else>Menu</span>
+        </button>
+    </nav> <!-- nav -->
+
+    <div class="wrapper">
+
+        <div v-if="history.show" class="historyWrapper">
+            <div class="historyRow">
+                <div class="title">Keywords</div>
+                <ol>
+                    <li v-for="keyword in history.recent_keyword" @click="searchQuery(keyword.search, 'keyword', keyword.url)">
+                        {{ keyword.search }}
+                    </li>
+                </ol>
+            </div>
+
+            <div class="historyRow">
+                <div class="title">Group</div>
+                <ol>
+                    <li v-for="group in history.recent_group" @click="searchQuery(group.search, 'group', group.url)">
+                        {{ group.search }}
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="posts" v-if="items.posts.length > 0">
+            <div class="item" v-for="(post, index) in items.posts" :data-name="post.name">
+
+                <span class="number" :data-active="post.active" v-html="index+1"></span>
+
+                <div class="post card">
+                    <div class="thumbnail">
+                        <img :src="post.thumbnail" width="180" height="180" />
+                    </div>
+                    <div class="content">
+                        <div>
+                            <div class="meta" v-if="post.contains" v-html="post.contains"></div>
+                            <span class="title" v-html="post.title"></span>
+                            <span @click="searchQuery(post.subreddit, 'group')" v-html="post.subreddit" class="subreddit"></span>
+                        </div>
+                        <div class="actions" @click="buttonActions(index)" v-html="post.cta"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button v-if="settings.show_loadmore" type="text" @click="loadMore('')" class="loadMore" :class="{ loading: items.loading_posts}">
+            <span v-if="items.loading_posts">Loading...</span>
+            <span v-else>Load More</span>
+        </button>
+
+    </div> <!-- .wrapper -->
+
+</section> <!-- #app -->
+
+</body>
+</html>
