@@ -1,0 +1,287 @@
+:root {
+  --fs: 16px;
+  --wrapper: 900px;
+  --gutter: 25px;
+  --primary: #176B87;
+  --secondary: #64CCC5;
+  --third: #DAFFFB;
+  --background: #04364A;
+  --border-radius: 10px;
+  --textColor: #111111;
+  --darkTextColor: #ffffff;
+}
+@media all and (max-width: 960px) {
+  :root {
+    --gutter: 15px;
+  }
+}
+[v-cloak] {
+  display: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs);
+  font-family: Arial;
+  line-height: 22px;
+  font-weight: 400;
+  background-color: var(--background);
+  color: var(--textColor);
+}
+a {
+  text-decoration: none;
+}
+img {
+  width: auto;
+  max-width: 100%;
+  display: block;
+  line-height: 0;
+}
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+  padding-left: var(--gutter);
+}
+form {
+  --_fieldPadding: 10px;
+  --_fieldBG: white;
+  --_buttonBG: black;
+  --_buttonText: white;
+}
+form input {
+  background: var(--_fieldBG);
+  border: none;
+  outline: none;
+  padding: var(--_fieldPadding);
+  font-size: inherit;
+  width: 100%;
+}
+form button,
+form .button {
+  display: inline-block;
+  border: none;
+  padding: var(--_fieldPadding);
+  background: var(--_buttonBG);
+  color: var(--_buttonText);
+  cursor: pointer;
+  width: 100%;
+}
+form select {
+  border: none;
+  background: var(--_fieldBG);
+  padding: var(--_fieldPadding);
+  width: 100%;
+}
+.wrapper {
+  width: 100%;
+  max-width: var(--wrapper);
+  padding: 0 var(--gutter);
+  margin: auto;
+}
+nav {
+  display: block;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px var(--gutter);
+  background: var(--primary);
+  z-index: 100;
+}
+nav .menu {
+  padding: calc(var(--gutter) / 2);
+  border: none;
+  background-color: var(--secondary);
+  color: var(--darkTextColor);
+  font-size: var(--fs);
+  width: 100%;
+  cursor: pointer;
+}
+nav form + .menu {
+  margin-top: 15px;
+}
+nav .inner {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+@media all and (max-width: 960px) {
+  nav .inner {
+    flex-direction: column;
+  }
+}
+nav .options {
+  --_maxWidth: 300px;
+  display: flex;
+  max-width: var(--_maxWidth);
+}
+@media all and (max-width: 960px) {
+  nav .options {
+    --_maxWidth: unset;
+  }
+}
+nav .options button {
+  flex: 0 0 100px;
+}
+nav .options button.historyButton {
+  flex: 0 0 100%;
+}
+.posts {
+  --_gridColumn: 3;
+  display: grid;
+  gap: var(--gutter);
+  padding: var(--gutter) 0 calc(var(--gutter) * 2) 0;
+  grid-template-columns: repeat(var(--_gridColumn), 1fr);
+}
+@media all and (max-width: 960px) {
+  .posts {
+    --_gridColumn: 2;
+  }
+}
+.item {
+  position: relative;
+}
+.item .number {
+  --_offset: 10px;
+  --_size: 25px;
+  position: absolute;
+  top: var(--_offset);
+  left: var(--_offset);
+  width: var(--_size);
+  height: var(--_size);
+  background-color: black;
+  color: white;
+  z-index: 5;
+  text-align: center;
+  line-height: var(--_size);
+  border-radius: var(--border-radius);
+}
+.item .number[data-active="true"] {
+  background-color: var(--secondary);
+  color: var(--textColor);
+}
+.card {
+  --_cardBG: var(--third);
+  --_cardThumbnail: 180px;
+  --_cardContentPadding: var(--gutter);
+  --_cardButtonBG: var(--secondary);
+  --_cardButtonText: var(--third);
+  --_cardButtonPadding: 12px 8px;
+  --_cardTitle: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--_cardBG);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  height: 100%;
+}
+@media all and (max-width: 960px) {
+  .card {
+    --_cardThumbnail: 120px;
+    --_cardTitle: 18px;
+  }
+}
+.card .thumbnail {
+  flex: 0 0 var(--_cardThumbnail);
+  position: relative;
+}
+.card .thumbnail:before {
+  content: '';
+  display: block;
+  padding-bottom: 100%;
+}
+.card .thumbnail img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+.card .content {
+  flex: 1 1 auto;
+  padding: var(--_cardContentPadding);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--gutter);
+}
+.card .content > * {
+  display: block;
+}
+.card .content .meta {
+  font-size: 14px;
+  opacity: 0.6;
+  line-height: 16px;
+  margin-bottom: 10px;
+}
+.card .content .title {
+  font-size: var(--_cardTitle);
+  font-weight: 500;
+  margin: 0 0 10px;
+  display: block;
+}
+.card .content .subreddit {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.card .content .actions {
+  position: relative;
+  margin: 0 calc(var(--gutter) * -1) calc(var(--gutter) * -1);
+  display: flex;
+}
+.card .content .actions a {
+  flex: 1 1 100%;
+  display: inline-block;
+  padding: var(--_cardButtonPadding);
+  background-color: var(--_cardButtonBG);
+  width: 100%;
+  text-align: center;
+  color: var(--_cardButtonText);
+}
+.card .content .actions a + a {
+  --_cardButtonBG: var(--textColor);
+}
+.loadMore {
+  border: none;
+  background-color: var(--secondary);
+  color: var(--textColor);
+  width: 100%;
+  padding: 14px 20px;
+  font-size: inherit;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  margin-bottom: calc(var(--gutter) * 2);
+}
+.loadMore.loading {
+  pointer-events: none;
+  opacity: 0.4;
+}
+.historyWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gutter);
+  padding: var(--gutter) 0;
+}
+.historyWrapper .historyRow {
+  padding: var(--gutter);
+  background-color: var(--third);
+  color: var(--textColor);
+  border-radius: var(--border-radius);
+}
+.historyWrapper .historyRow .title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.historyWrapper .historyRow li {
+  cursor: pointer;
+  padding: 4px 0;
+}
+/*# sourceMappingURL=style.css.map */
