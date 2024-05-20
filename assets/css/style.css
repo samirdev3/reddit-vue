@@ -2,11 +2,12 @@
   --fs: 16px;
   --wrapper: 900px;
   --gutter: 25px;
-  --primary: #176B87;
-  --secondary: #64CCC5;
-  --third: #DAFFFB;
-  --background: #04364A;
-  --border-radius: 10px;
+  --accent-1: #222831;
+  --accent-2: #31363F;
+  --accent-3: #76ABAE;
+  --accent-4: #EEEEEE;
+  --accent-5: #ffffff;
+  --border-radius: 6px;
   --textColor: #111111;
   --darkTextColor: #ffffff;
 }
@@ -28,7 +29,7 @@ body {
   font-family: Arial;
   line-height: 22px;
   font-weight: 400;
-  background-color: var(--background);
+  background-color: var(--accent-4);
   color: var(--textColor);
 }
 a {
@@ -49,16 +50,8 @@ ul {
 form {
   --_fieldPadding: 10px;
   --_fieldBG: white;
-  --_buttonBG: black;
+  --_buttonBG: var(--accent-3);
   --_buttonText: white;
-}
-form input {
-  background: var(--_fieldBG);
-  border: none;
-  outline: none;
-  padding: var(--_fieldPadding);
-  font-size: inherit;
-  width: 100%;
 }
 form button,
 form .button {
@@ -69,12 +62,16 @@ form .button {
   color: var(--_buttonText);
   cursor: pointer;
   width: 100%;
+  border-radius: var(--border-radius);
 }
-form select {
-  border: none;
+form .field {
   background: var(--_fieldBG);
   padding: var(--_fieldPadding);
+  border: none;
+  outline: none;
   width: 100%;
+  font-size: inherit;
+  border-radius: var(--border-radius);
 }
 .wrapper {
   width: 100%;
@@ -89,17 +86,19 @@ nav {
   left: 0;
   width: 100%;
   padding: 15px var(--gutter);
-  background: var(--primary);
+  background: var(--accent-1);
   z-index: 100;
+  margin-bottom: var(--gutter);
 }
 nav .menu {
   padding: calc(var(--gutter) / 2);
   border: none;
-  background-color: var(--secondary);
+  background-color: var(--accent-3);
   color: var(--darkTextColor);
   font-size: var(--fs);
   width: 100%;
   cursor: pointer;
+  border-radius: var(--border-radius);
 }
 nav form + .menu {
   margin-top: 15px;
@@ -124,6 +123,12 @@ nav .options {
     --_maxWidth: unset;
   }
 }
+nav .options.fieldGroup input {
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+nav .options.fieldGroup button {
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
 nav .options button {
   flex: 0 0 100px;
 }
@@ -131,63 +136,62 @@ nav .options button.historyButton {
   flex: 0 0 100%;
 }
 .posts {
-  --_gridColumn: 3;
+  --_gridColumn: 1;
   display: grid;
   gap: var(--gutter);
-  padding: var(--gutter) 0 calc(var(--gutter) * 2) 0;
+  padding: 0;
   grid-template-columns: repeat(var(--_gridColumn), 1fr);
 }
-@media all and (max-width: 960px) {
-  .posts {
-    --_gridColumn: 2;
-  }
-}
 .item {
+  --_cardBG: var(--accent-5);
+  --_cardThumbnail: 180px;
+  --_cardContentPadding: var(--gutter);
+  --_cardButtonBG: var(--accent-2);
+  --_cardButtonText: var(--accent-4);
+  --_cardButtonPadding: 12px 8px;
+  --_cardTitle: 20px;
   position: relative;
 }
+@media all and (max-width: 960px) {
+  .item {
+    --_cardThumbnail: 120px;
+    --_cardTitle: 18px;
+  }
+}
 .item .number {
-  --_offset: 10px;
-  --_size: 25px;
+  --_offset: 0px;
+  --_size: 35px;
   position: absolute;
   top: var(--_offset);
   left: var(--_offset);
   width: var(--_size);
   height: var(--_size);
-  background-color: black;
-  color: white;
+  background-color: var(--accent-4);
+  color: var(--textColor);
   z-index: 5;
   text-align: center;
   line-height: var(--_size);
-  border-radius: var(--border-radius);
+  border-radius: 0 0 var(--border-radius);
+  border-color: var(--accent-1);
+  border-width: 0 2px 2px 0;
+  border-style: solid;
 }
-.item .number[data-active="true"] {
-  background-color: var(--secondary);
-  color: var(--textColor);
+.item.active {
+  --_cardButtonBG: var(--accent-3);
 }
 .card {
-  --_cardBG: var(--third);
-  --_cardThumbnail: 180px;
-  --_cardContentPadding: var(--gutter);
-  --_cardButtonBG: var(--secondary);
-  --_cardButtonText: var(--third);
-  --_cardButtonPadding: 12px 8px;
-  --_cardTitle: 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: var(--_cardBG);
   border-radius: var(--border-radius);
   overflow: hidden;
   height: 100%;
-}
-@media all and (max-width: 960px) {
-  .card {
-    --_cardThumbnail: 120px;
-    --_cardTitle: 18px;
-  }
+  border: 2px solid var(--accent-1);
 }
 .card .thumbnail {
   flex: 0 0 var(--_cardThumbnail);
   position: relative;
+  background-color: var(--accent-2);
 }
 .card .thumbnail:before {
   content: '';
@@ -201,18 +205,25 @@ nav .options button.historyButton {
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  object-fit: cover;
+  object-fit: contain;
 }
 .card .content {
   flex: 1 1 auto;
   padding: var(--_cardContentPadding);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   gap: var(--gutter);
+}
+@media all and (max-width: 960px) {
+  .card .content {
+    flex-direction: column;
+  }
 }
 .card .content > * {
   display: block;
+  flex: 1 1 auto;
 }
 .card .content .meta {
   font-size: 14px;
@@ -225,6 +236,7 @@ nav .options button.historyButton {
   font-weight: 500;
   margin: 0 0 10px;
   display: block;
+  word-break: break-word;
 }
 .card .content .subreddit {
   text-decoration: underline;
@@ -232,8 +244,16 @@ nav .options button.historyButton {
 }
 .card .content .actions {
   position: relative;
-  margin: 0 calc(var(--gutter) * -1) calc(var(--gutter) * -1);
   display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 0 0 150px;
+}
+@media all and (max-width: 960px) {
+  .card .content .actions {
+    width: 100%;
+    flex: 0 0 100%;
+  }
 }
 .card .content .actions a {
   flex: 1 1 100%;
@@ -243,22 +263,35 @@ nav .options button.historyButton {
   width: 100%;
   text-align: center;
   color: var(--_cardButtonText);
+  border-radius: var(--border-radius);
 }
-.card .content .actions a + a {
-  --_cardButtonBG: var(--textColor);
+@media all and (max-width: 960px) {
+  .card .content .actions a {
+    flex: 0 0 auto;
+  }
 }
-.loadMore {
+.buttonGroup {
+  margin: calc(var(--gutter) * 2) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gutter);
+}
+.buttonGroup button {
   border: none;
-  background-color: var(--secondary);
-  color: var(--textColor);
-  width: 100%;
+  background-color: var(--accent-2);
+  color: var(--accent-5);
   padding: 14px 20px;
   font-size: inherit;
   border-radius: var(--border-radius);
   cursor: pointer;
-  margin-bottom: calc(var(--gutter) * 2);
+  pointer-events: none;
+  opacity: 0.4;
 }
-.loadMore.loading {
+.buttonGroup button.active {
+  pointer-events: unset;
+  opacity: 1;
+}
+.buttonGroup button.loading {
   pointer-events: none;
   opacity: 0.4;
 }
@@ -270,9 +303,10 @@ nav .options button.historyButton {
 }
 .historyWrapper .historyRow {
   padding: var(--gutter);
-  background-color: var(--third);
+  background-color: var(--accent-5);
   color: var(--textColor);
   border-radius: var(--border-radius);
+  border: 2px solid var(--accent-1);
 }
 .historyWrapper .historyRow .title {
   font-size: 18px;
