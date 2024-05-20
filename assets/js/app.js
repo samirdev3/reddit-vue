@@ -4,8 +4,13 @@ const app = createApp({
     data() {
         return {
             settings: {
-                per_load: 6,
-                show_loadmore: false,
+                per_load: 10,
+                actions: {
+                    show: false,
+                    active_previous: false,
+                    active_next: false
+                },
+                total_posts: 0
             },
             search: {
                 input: '',
@@ -13,8 +18,10 @@ const app = createApp({
             },
             items: {
                 posts: [],
+                first_post:  '',
                 last_post:  '',
-                loading_posts: false,
+                previous: false,
+                next: false
             },
             filter: {
               type: 'keyword',
@@ -50,7 +57,8 @@ const app = createApp({
                     return Promise.reject(response);
                 }).then(function (data) {
                     vm.createPostHandler(data.data.children);
-                    vm.items.loading_posts = false;
+                    vm.items.previous = false;
+                    vm.items.next = false;
                     // set history
                     let historyType = '';
                     (vm.filter.type === 'group') ? historyType = vm.history.recent_group : historyType = vm.history.recent_keyword;
@@ -63,10 +71,22 @@ const app = createApp({
 
         // create post
         createPostHandler(data) {
+            this.settings.actions.active_previous = false;
+            this.settings.actions.active_next = false;
+
             data.forEach((post, index) => {
                 const postData = post.data;
                 const thumb = this.verifyThumbnail(postData);
                 let card = {};
+
+                if ( (index+1) === 1 ) {
+                    this.items.first_post = postData.name;
+
+                    if ( this.settings.total_posts > this.settings.per_load ) {
+                        this.settings.actions.active_previous = true;
+                    }
+                }
+
                 if ( thumb === '' ) {
                     card.thumbnail = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'%3E%3Cpath fill='%23black' d='M0 0h150v150H0z'/%3E%3Ctext x='50%25' y='50%25' fill='%23fff' font-family='Arial, Helvetica, sans-serif' font-size='14px' text-anchor='middle'%3ENO-PREVIEW%3C/text%3E%3C/svg%3E";
                 } else if ( thumb === 'NSFW' ) {
@@ -90,7 +110,7 @@ const app = createApp({
 
                 if ( (index+1) === this.settings.per_load ) {
                     this.items.last_post = postData.name;
-                    this.settings.show_loadmore = true;
+                    this.settings.actions.active_next = true;
                 }
             });
         },
@@ -98,7 +118,7 @@ const app = createApp({
         // history
         historyHandler(array, search) {
             let isAlreadyAdded = false;
-            const newURL = `${this.search.url}&after=${this.items.last_post}`;
+            const newURL = `${this.search.url}&after=${this.items.first_post}`;
             array.map(p => {
                 if ( p.search === search ) {
                     isAlreadyAdded = true;
@@ -123,6 +143,8 @@ const app = createApp({
                 vm.items.posts = [];
                 let search_url;
                 let str = vm.search.input;
+                vm.settings.total_posts = vm.settings.per_load;
+                vm.settings.actions.show = true;
 
                 if ( inputID !== '' ) {
                     vm.search.input = inputID;
@@ -206,10 +228,23 @@ const app = createApp({
         },
 
         // load more
-        loadMore() {
-            this.items.loading_posts = true;
-            const update_url = `${this.search.url}&after=${this.items.last_post}`;
-            this.getPostsHandler(update_url);
+        loadPosts(type) {
+            let update_url = '';
+            this.items.posts = [];
+
+            if ( type === 'previous' ) {
+                this.items.previous = true;
+                this.settings.total_posts = (this.settings.total_posts - this.settings.per_load);
+                update_url = `${this.search.url}&before=${this.items.first_post}`;
+            } else if ( type === 'next' ) {
+                this.items.next = true;
+                this.settings.total_posts = (this.settings.total_posts + this.settings.per_load);
+                update_url = `${this.search.url}&after=${this.items.last_post}`;
+            }
+
+            if ( update_url !== '' ) {
+                this.getPostsHandler(update_url);
+            }
         },
 
         // filter
