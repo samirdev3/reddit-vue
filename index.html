@@ -14,19 +14,19 @@
         <form v-if="menu.active" @submit.prevent>
             <div class="inner">
                 <div class="options">
-                    <select @change="filterBy(filter.type, 'type')" v-model="filter.type">
+                    <select @change="filterBy(filter.type, 'type')" v-model="filter.type" class="field">
                         <option value="keyword">Keyword</option>
                         <option value="group">Group</option>
                     </select>
                 </div>
-                <div class="options">
-                    <input type="text" placeholder="Search" v-model="search.input" />
+                <div class="options fieldGroup">
+                    <input type="text" placeholder="Search" v-model="search.input" class="field" />
                     <button type="text" @click="searchQuery('')">
                         Search
                     </button>
                 </div>
                 <div class="options">
-                    <select @change="filterBy(filter.sort, 'sort')" v-model="filter.sort">
+                    <select @change="filterBy(filter.sort, 'sort')" v-model="filter.sort" class="field">
                         <option value="relevance">Relevance</option>
                         <option value="hot">Hot</option>
                         <option value="top">Top</option>
@@ -35,7 +35,7 @@
                     </select>
                 </div>
                 <div class="options">
-                    <select @change="filterBy(filter.time, 'time')" v-model="filter.time">
+                    <select @change="filterBy(filter.time, 'time')" v-model="filter.time" class="field">
                         <option value="all">All</option>
                         <option value="year">Year</option>
                         <option value="month">Month</option>
@@ -44,7 +44,7 @@
                     </select>
                 </div>
                 <div class="options">
-                    <select @change="filterBy(filter.nsfw, 'nsfw')" v-model="filter.nsfw">
+                    <select @change="filterBy(filter.nsfw, 'nsfw')" v-model="filter.nsfw" class="field">
                         <option value="off">Safe Search</option>
                         <option value="on">NSFW</option>
                     </select>
@@ -85,9 +85,9 @@
         </div>
 
         <div class="posts" v-if="items.posts.length > 0">
-            <div class="item" v-for="(post, index) in items.posts" :data-name="post.name">
+            <div class="item" v-for="(post, index) in items.posts" :data-name="post.name" :class="{ active: post.active}">
 
-                <span class="number" :data-active="post.active" v-html="index+1"></span>
+                <span class="number" v-html="index+1"></span>
 
                 <div class="post card">
                     <div class="thumbnail">
@@ -105,10 +105,19 @@
             </div>
         </div>
 
-        <button v-if="settings.show_loadmore" type="text" @click="loadMore('')" class="loadMore" :class="{ loading: items.loading_posts}">
-            <span v-if="items.loading_posts">Loading...</span>
-            <span v-else>Load More</span>
-        </button>
+        <div class="buttonGroup" v-if="settings.actions.show">
+
+            <button type="text" @click="loadPosts('previous')" :class="{ loading: items.previous, active: settings.actions.active_previous}">
+                <span v-if="items.previous">Loading...</span>
+                <span v-else>Previous</span>
+            </button>
+
+            <button type="text" @click="loadPosts('next')" :class="{ loading: items.next, active: settings.actions.active_next}">
+                <span v-if="items.next">Loading...</span>
+                <span v-else>Next</span>
+            </button>
+
+        </div>
 
     </div> <!-- .wrapper -->
 
