@@ -33,7 +33,7 @@ body {
     font-family: Arial;
     line-height: 22px;
     font-weight: 400;
-    background-color: var(--accent-4);
+    background-color: var(--_bodyBg, --accent-4);
     color: var(--textColor);
 }
 
@@ -357,6 +357,30 @@ nav {
         li {
             cursor: pointer;
             padding: 4px 0;
+            word-break: break-all;
         }
+    }
+}
+
+.player {
+    --_max: 480px;
+
+    &__wrapper {
+        min-height: 100vh;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    &__inner {
+        border-radius: var(--border-radius);
+        border: 4px solid var(--accent-2);
+        overflow: hidden;
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+        max-width: var(--_max);
     }
 }
