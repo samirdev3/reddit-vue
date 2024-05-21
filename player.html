@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Player</title>
+    <script src="assets/js/video.min.js"></script>
+    <link href="assets/css/video.css" rel="stylesheet"/>
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script src="assets/js/player.js" type="module"></script>
+</head>
+<body style="--_bodyBg: var(--accent-1)">
+
+<section id="app" class="player" v-cloak>
+
+    <div class="wrapper">
+
+        <div class="player__wrapper">
+            <div class="player__inner" v-html="player.html"></div>
+        </div>
+
+    </div> <!-- .wrapper -->
+
+</section> <!-- #app -->
+</body>
+</html>
