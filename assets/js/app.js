@@ -1,4 +1,4 @@
-import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js'
 
 const app = createApp({
     data() {
@@ -152,9 +152,9 @@ const app = createApp({
                 }
 
                 str = str.replace(/\s+/g, '+');
-                let src = `https://www.reddit.com/search.json?q=${str}&`;
+                let src = `https://api.reddit.com/search.json?q=${str}&`;
                 if ( vm.filter.type === 'group' ) {
-                    src = `https://www.reddit.com/r/${str}.json?`;
+                    src = `https://api.reddit.com/r/${str}.json?`;
                 }
 
                 search_url = `${src}include_over_18=${vm.filter.nsfw}&limit=${vm.settings.per_load}&sort=${vm.filter.sort}&t=${vm.filter.time}`;
@@ -204,13 +204,22 @@ const app = createApp({
                 if ( post.media !== null ) {
                     if ( typeof post.media.reddit_video !== undefined && post.media.reddit_video !== null) {
                         let cta = '';
+                        let duration = '';
+                        if ( typeof post.media.reddit_video.duration !== undefined && post.media.reddit_video.duration!== null ) {
+                            function padTo2Digits(num) {
+                                return num.toString().padStart(2, '0');
+                            }
+                            const total_video_duration = post.media.reddit_video.duration;
+                            const minutes = Math.floor(total_video_duration / 60);
+                            const seconds = total_video_duration % 60;
+                            duration = `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`;
+                        }
                         const video_path = post.media.reddit_video.fallback_url;
-                        cta = `<a href="${video_path}" target="_blank" class="video">VD</a>`;
+                        cta = `<a href="${window.location.href}player.html?mp4=${video_path}" target="_blank" class="video">${duration}</a>`;
                         if ( post.media.reddit_video.has_audio && (typeof post.media.reddit_video.hls_url !== undefined && post.media.reddit_video.hls_url !== '') ) {
                             const hls_path = post.media.reddit_video.hls_url;
-                            cta += ` <a href="https://www.hlsplayer.org/play?url=${hls_path}" target="_blank" class="video">VD Audio</a>`;
+                            cta += ` <a href="${window.location.href}player.html?m3u8=${hls_path}" target="_blank" class="video">HSL - ${duration}</a>`;
                         }
-
                         return cta;
                     }
                 }
