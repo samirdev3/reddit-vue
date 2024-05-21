@@ -23,13 +23,14 @@
   box-sizing: border-box;
 }
 body {
+  --_bodyBg: var(--accent-4);
   margin: 0;
   padding: 0;
   font-size: var(--fs);
   font-family: Arial;
   line-height: 22px;
   font-weight: 400;
-  background-color: var(--_bodyBg, --accent-4);
+  background-color: var(--_bodyBg);
   color: var(--textColor);
 }
 a {
@@ -131,6 +132,7 @@ nav .options.fieldGroup button {
 }
 nav .options button {
   flex: 0 0 100px;
+  font-size: var(--fs);
 }
 nav .options button.historyButton {
   flex: 0 0 100%;
