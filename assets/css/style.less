@@ -27,13 +27,15 @@
 }
 
 body {
+    --_bodyBg: var(--accent-4);
+
     margin: 0;
     padding: 0;
     font-size: var(--fs);
     font-family: Arial;
     line-height: 22px;
     font-weight: 400;
-    background-color: var(--_bodyBg, --accent-4);
+    background-color: var(--_bodyBg);
     color: var(--textColor);
 }
 
@@ -147,6 +149,7 @@ nav {
 
         button {
             flex: 0 0 100px;
+            font-size: var(--fs);
 
             &.historyButton {
                 flex: 0 0 100%;
